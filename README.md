@@ -17,6 +17,13 @@ print in page.tpl.php
 ```
 <?php print $search_box?>
 ```
+#### Utilizing another module's rendering function to create a variable to print in the template
+Example here is the print module
+```php
+    if (function_exists('print_insert_link')){
+        $vars['print_link'] = print_insert_link();
+    }
+```
 
 ### theme_preprocess_block
 #### Giving block titles a special block title class
