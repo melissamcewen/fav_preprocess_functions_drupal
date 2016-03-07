@@ -27,4 +27,31 @@ $vars['title_attributes_array']['class'][] = 'block-title';
 ```php
 $vars['classes_array'][] = 'region-block-'.$vars['block_id'];
 ```
+### theme_css_alter
+#### Remove a module's CSS if it conflicts with theme
+for example here we are removing search's css
+```php
+unset($css[drupal_get_path('module','search').'/search.css']);
+```
+
+### theme_form_alter
+#### Add class to search form input (classless by default in Drupal 6)
+```php
+    if ($form_id == 'search_form') {
+        $form['basic']['keys']['#attributes']['class'][] = 'search-input-form';
+    }
+```
+
+## Views
+### theme_preprocess_views_view
+#### Adding custom js to a particular view that shouldn't be loaded on the rest of the site
+```php
+    $view = &$vars['view'];
+
+    if($view->name == 'VIEWS_MACHINE_NAME' && $vars['display_id'] == 'page'){
+        drupal_add_js(drupal_get_path('theme', 'THEME_NAME') . '/js/isotope.pkgd.min.js');
+        drupal_add_js(drupal_get_path('theme', 'THEME_NAME') . '/js/isotope_config.js');
+    }
+
+```
 
