@@ -7,6 +7,15 @@ For example here we are adding Lato, a Google font
 ```php
 drupal_add_css('http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic', array('type' => 'external'));
 ```
+#### Allow a node field to add an individual ad tracking code per node
+```php
+$node = menu_get_object('node');
+$vars['trackingcode'] = '';
+if (!empty($node->field_tracking_codes)) {
+  $vars['trackingcode']= $node->field_tracking_codes['und'][0]['value'];
+}
+```
+
 ### theme_preprocess_page
 #### Adding a search box variable to print the search box (or search boxes)
 ```php
@@ -91,6 +100,12 @@ if (in_array('expanded', $element['#attributes']['class'])) {
  $wrapper_end = '</span>';
 }
 ```
+### theme_field
+#### Add the title as a caption under an image field
+```php
+$output .= '<div class="' . $classes . '"' . $variables['item_attributes'][$delta] . '>' . drupal_render($item) . $item['#item']['title'] . '</div>';
+```
+
 
 ## Views
 ### theme_preprocess_views_view
