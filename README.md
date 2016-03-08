@@ -24,6 +24,17 @@ Example here is the print module
         $vars['print_link'] = print_insert_link();
     }
 ```
+### Slice up a menu's links for theming individually
+```php
+ //print the footer links individually for theming
+  $menu = menu_navigation_links('menu-footer-menu');
+  $menu_links = array();
+  for ($i =0; $i <= 3; $i++) {
+    $menu_link = array_slice($menu, $i, 1);
+    $menu_links[]= theme('links__menu_menu-footer-menu', array('links' => $menu_link));
+  }
+  $vars['footer_menu_links'] = $menu_links;
+```
 
 ### theme_preprocess_block
 #### Giving block titles a special block title class
@@ -47,6 +58,22 @@ unset($css[drupal_get_path('module','search').'/search.css']);
     if ($form_id == 'search_form') {
         $form['basic']['keys']['#attributes']['class'][] = 'search-input-form';
     }
+```
+
+### theme_menu_tree
+### Add search box into menu
+```php
+  $search_box = drupal_render(drupal_get_form('search_form'));
+
+  return '<ul class="menu">' . $variables['tree'] .  $search_box . '</ul>';
+```
+### theme_menu_link
+#### Add special class to expanded items
+```php
+if (in_array('expanded', $element['#attributes']['class'])) {
+ $wrapper_start = '<span class="menu_drop_down">';
+ $wrapper_end = '</span>';
+  }
 ```
 
 ## Views
