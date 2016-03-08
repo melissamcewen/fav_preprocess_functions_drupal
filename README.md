@@ -20,20 +20,37 @@ print in page.tpl.php
 #### Utilizing another module's rendering function to create a variable to print in the template
 Example here is the print module
 ```php
-    if (function_exists('print_insert_link')){
-        $vars['print_link'] = print_insert_link();
-    }
+if (function_exists('print_insert_link')){
+  $vars['print_link'] = print_insert_link();
+}
 ```
-### Slice up a menu's links for theming individually
+#### Slice up a menu's links for theming individually
 ```php
- //print the footer links individually for theming
-  $menu = menu_navigation_links('menu-footer-menu');
-  $menu_links = array();
-  for ($i =0; $i <= 3; $i++) {
-    $menu_link = array_slice($menu, $i, 1);
-    $menu_links[]= theme('links__menu_menu-footer-menu', array('links' => $menu_link));
-  }
-  $vars['footer_menu_links'] = $menu_links;
+$menu = menu_navigation_links('menu-footer-menu');
+$menu_links = array();
+for ($i =0; $i <= 3; $i++) {
+   $menu_link = array_slice($menu, $i, 1);
+   $menu_links[]= theme('links__menu_menu-footer-menu', array('links' => $menu_link));
+}
+$vars['footer_menu_links'] = $menu_links;
+```
+#### Utilizie a node's field as a variable in the template and in css
+In this example a background image and its caption
+```php
+if (drupal_is_front_page() && !empty($node->field_image)) {
+ $num = array_rand($node->field_image[LANGUAGE_NONE]);
+ $vars['caption'] = '';
+ $vars['caption']= $node->field_image[LANGUAGE_NONE][$num]['title'];
+ $image = file_create_url($node->field_image[LANGUAGE_NONE][$num]['uri']);
+ drupal_add_css('body {background-image: url(' . $image . '); background-size: cover; }', array('type' => 'inline'));
+}
+```
+In this example randomly select a value from a multiple-value field to use as a tagline
+```php
+if (!empty($node->field_tagline)) {
+ $num = array_rand($node->field_tagline[LANGUAGE_NONE]);
+ $vars['tagline_field'] = $node->field_tagline[LANGUAGE_NONE][$num]['value'];
+}
 ```
 
 ### theme_preprocess_block
@@ -55,17 +72,16 @@ unset($css[drupal_get_path('module','search').'/search.css']);
 ### theme_form_alter
 #### Add class to search form input (classless by default in Drupal 6)
 ```php
-    if ($form_id == 'search_form') {
-        $form['basic']['keys']['#attributes']['class'][] = 'search-input-form';
-    }
+if ($form_id == 'search_form') {
+  $form['basic']['keys']['#attributes']['class'][] = 'search-input-form';
+}
 ```
 
 ### theme_menu_tree
 ### Add search box into menu
 ```php
-  $search_box = drupal_render(drupal_get_form('search_form'));
-
-  return '<ul class="menu">' . $variables['tree'] .  $search_box . '</ul>';
+$search_box = drupal_render(drupal_get_form('search_form'));
+return '<ul class="menu">' . $variables['tree'] .  $search_box . '</ul>';
 ```
 ### theme_menu_link
 #### Add special class to expanded items
@@ -73,19 +89,17 @@ unset($css[drupal_get_path('module','search').'/search.css']);
 if (in_array('expanded', $element['#attributes']['class'])) {
  $wrapper_start = '<span class="menu_drop_down">';
  $wrapper_end = '</span>';
-  }
+}
 ```
 
 ## Views
 ### theme_preprocess_views_view
 #### Adding custom js to a particular view that shouldn't be loaded on the rest of the site
 ```php
-    $view = &$vars['view'];
-
-    if($view->name == 'VIEWS_MACHINE_NAME' && $vars['display_id'] == 'page'){
-        drupal_add_js(drupal_get_path('theme', 'THEME_NAME') . '/js/isotope.pkgd.min.js');
-        drupal_add_js(drupal_get_path('theme', 'THEME_NAME') . '/js/isotope_config.js');
-    }
-
+$view = &$vars['view'];
+if($view->name == 'VIEWS_MACHINE_NAME' && $vars['display_id'] == 'page'){
+  drupal_add_js(drupal_get_path('theme', 'THEME_NAME') . '/js/isotope.pkgd.min.js');
+  drupal_add_js(drupal_get_path('theme', 'THEME_NAME') . '/js/isotope_config.js');
+}
 ```
 
