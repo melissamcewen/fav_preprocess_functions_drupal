@@ -106,6 +106,14 @@ if (in_array('expanded', $element['#attributes']['class'])) {
 $output .= '<div class="' . $classes . '"' . $variables['item_attributes'][$delta] . '>' . drupal_render($item) . $item['#item']['title'] . '</div>';
 ```
 
+###  theme_file_link
+grab the file title if there is one
+
+```php
+
+  $document_title = field_get_items('file', $file, 'field_document_title');
+  $document_title_value = $document_title[0]['value'];
+```
 
 ## Views
 ### theme_preprocess_views_view
@@ -117,4 +125,6 @@ if($view->name == 'VIEWS_MACHINE_NAME' && $vars['display_id'] == 'page'){
   drupal_add_js(drupal_get_path('theme', 'THEME_NAME') . '/js/isotope_config.js');
 }
 ```
+
+
 
